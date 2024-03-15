@@ -1,4 +1,11 @@
-import { collection, doc, getDocs, getDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDocs,
+  getDoc,
+  updateDoc,
+  DocumentReference,
+} from "firebase/firestore";
 import { FirestoreDocumentNotFoundError } from "~/errors/client";
 
 export interface Radiator {
@@ -76,9 +83,52 @@ const useFirestoreRadiators = () => {
     return radiatorsHistory;
   };
 
+  const getRadiatorRefById = (radiatorId: string) => {
+    const radiatorsRef = collection($db, "radiators");
+    const radiatorRef = doc(radiatorsRef, radiatorId);
+    return radiatorRef;
+  };
+
+  const getRadiatorSnap = async (
+    radiatorId: string,
+    radiatorRef: DocumentReference
+  ) => {
+    const radiatorSnap = await getDoc(radiatorRef);
+    if (!radiatorSnap.exists()) {
+      throw new FirestoreDocumentNotFoundError(
+        `Radiator with id: ${radiatorId} does not exist`
+      );
+    }
+    return radiatorSnap;
+  };
+
+  const increaseTemperatureByOne = async (radiatorId: string) => {
+    const radiatorRef = getRadiatorRefById(radiatorId);
+    const radiatorSnap = await getRadiatorSnap(radiatorId, radiatorRef);
+
+    const temperature = Number(radiatorSnap.data().temperature);
+    const newTemperature = temperature + 1;
+    await updateDoc(radiatorRef, {
+      temperature: newTemperature,
+    });
+  };
+
+  const decreaseTemperatureByOne = async (radiatorId: string) => {
+    const radiatorRef = getRadiatorRefById(radiatorId);
+    const radiatorSnap = await getRadiatorSnap(radiatorId, radiatorRef);
+
+    const temperature = Number(radiatorSnap.data().temperature);
+    const newTemperature = temperature - 1;
+    await updateDoc(radiatorRef, {
+      temperature: newTemperature,
+    });
+  };
+
   return {
     getRadiators,
     getHistoryByDate,
+    increaseTemperatureByOne,
+    decreaseTemperatureByOne,
   };
 };
 
