@@ -124,11 +124,23 @@ const useFirestoreRadiators = () => {
     });
   };
 
+  const toggleStatus = async (radiatorId: string) => {
+    const radiatorRef = getRadiatorRefById(radiatorId);
+    const radiatorSnap = getRadiatorSnap(radiatorId, radiatorRef);
+
+    const status = Boolean((await radiatorSnap).data().status);
+    const newStatus = !status;
+    await updateDoc(radiatorRef, {
+      status: newStatus,
+    });
+  };
+
   return {
     getRadiators,
     getHistoryByDate,
     increaseTemperatureByOne,
     decreaseTemperatureByOne,
+    toggleStatus,
   };
 };
 

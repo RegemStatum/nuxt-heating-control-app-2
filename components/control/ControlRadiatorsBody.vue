@@ -8,7 +8,7 @@ interface Props {
 }
 defineProps<Props>();
 
-const { increaseTemperatureByOne, decreaseTemperatureByOne } =
+const { increaseTemperatureByOne, decreaseTemperatureByOne, toggleStatus } =
   useFirestoreRadiators();
 
 const handleIncreaseTemperatureByOneBtn = async (radiatorId: string) => {
@@ -18,6 +18,11 @@ const handleIncreaseTemperatureByOneBtn = async (radiatorId: string) => {
 
 const handleDecreaseTemperatureByOneBtn = async (radiatorId: string) => {
   await decreaseTemperatureByOne(radiatorId);
+  await refreshNuxtData();
+};
+
+const handleToggleStatus = async (radiatorId: string) => {
+  await toggleStatus(radiatorId);
   await refreshNuxtData();
 };
 </script>
@@ -55,8 +60,10 @@ const handleDecreaseTemperatureByOneBtn = async (radiatorId: string) => {
         </div>
       </td>
       <td class="status">
-        <UiBadge v-if="status" text="on" type="success" />
-        <UiBadge v-else text="off" type="error" />
+        <button @click="() => handleToggleStatus(index)">
+          <UiBadge v-if="status" text="on" type="success" />
+          <UiBadge v-else text="off" type="error" />
+        </button>
       </td>
     </tr>
   </tbody>
