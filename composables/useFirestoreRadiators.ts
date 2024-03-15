@@ -6,7 +6,14 @@ import {
   updateDoc,
   DocumentReference,
 } from "firebase/firestore";
-import { FirestoreDocumentNotFoundError } from "~/errors/client";
+import {
+  RADIATOR_TEMPERATURE_MAX,
+  RADIATOR_TEMPERATURE_MIN,
+} from "~/constants/mock/radiators";
+import {
+  FirestoreDocumentNotFoundError,
+  InvalidInputError,
+} from "~/errors/client";
 
 export interface Radiator {
   name: string;
@@ -108,6 +115,12 @@ const useFirestoreRadiators = () => {
 
     const temperature = Number(radiatorSnap.data().temperature);
     const newTemperature = temperature + 1;
+    if (newTemperature > RADIATOR_TEMPERATURE_MAX) {
+      throw new InvalidInputError(
+        `Maximal radiator temperature is ${RADIATOR_TEMPERATURE_MAX}`
+      );
+    }
+
     await updateDoc(radiatorRef, {
       temperature: newTemperature,
     });
@@ -119,6 +132,12 @@ const useFirestoreRadiators = () => {
 
     const temperature = Number(radiatorSnap.data().temperature);
     const newTemperature = temperature - 1;
+    if (newTemperature < RADIATOR_TEMPERATURE_MIN) {
+      throw new InvalidInputError(
+        `Minimal radiator temperature is ${RADIATOR_TEMPERATURE_MIN}`
+      );
+    }
+
     await updateDoc(radiatorRef, {
       temperature: newTemperature,
     });
