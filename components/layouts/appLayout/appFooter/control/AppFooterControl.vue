@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AppFooterControlMenu from "./AppFooterControlMenu.vue";
 import AppFooterControlHome from "../../navigation/NavigationHome.vue";
-import AppFooterControlCharts from "../../navigation/NavigationCharts.vue";
+import AppFooterControlControl from "../../navigation/NavigationControl.vue";
 import AppFooterControlRadiators from "../../navigation/NavigationRadiators.vue";
 
 const route = useRoute();
@@ -21,8 +21,8 @@ const { closeSidebar } = appStore;
       :isActive="route.path === '/radiators'"
       @click="closeSidebar"
     />
-    <AppFooterControlCharts
-      :isActive="route.path === '/charts'"
+    <AppFooterControlControl
+      :isActive="route.path === '/control'"
       @click="closeSidebar"
     />
   </nav>
