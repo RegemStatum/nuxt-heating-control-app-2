@@ -1,0 +1,66 @@
+@use "./reset" as *;
+@use "./fonts" as *;
+
+@use "./functions" as *;
+
+body {
+  $textFontWeight: 400;
+
+  font-family: "Open Sans", sans-serif;
+  font-style: normal;
+  font-weight: $textFontWeight;
+  line-height: getLineHeight(1300);
+
+  // Colors
+  color: getColor("nt-1");
+  background-color: getColor("nt-11");
+
+  // Typography
+  $headingFontWeight: 400;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  h7,
+  h8 {
+    font-family: "Montserrat", sans-serif;
+    font-style: normal;
+    font-weight: $headingFontWeight;
+    line-height: getLineHeight(1300);
+  }
+
+  p,
+  a {
+    font-family: "Open Sans", sans-serif;
+    font-style: normal;
+    font-weight: $textFontWeight;
+    line-height: getLineHeight(1300);
+  }
+
+  // Button
+  button {
+    margin: 0;
+    padding: 0;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+  }
+
+  // Table
+  table {
+    border-spacing: 0;
+
+    th,
+    td {
+      padding: 0;
+    }
+
+    th {
+      text-align: start;
+      text-indent: 0;
+      font-weight: $textFontWeight;
+    }
+  }
+}

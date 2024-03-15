@@ -1,0 +1,24 @@
+@use "./colors" as *;
+@use "./typography" as *;
+
+// Colors
+@function getColor($color: "text-color") {
+  @return map-get($color-palette, $color);
+}
+
+// Typography
+@function getFontSize($size: 400) {
+  @return map-get($font-sizes, $size);
+}
+
+@function getLineHeight($line-height: 400) {
+  @return map-get($line-heights, $line-height);
+}
+
+@function getInd($indentation: 400) {
+  @return map-get($indentations, $indentation);
+}
+
+@function getBorderRadius($border-radius: 400) {
+  @return map-get($border-radiuses, $border-radius);
+}

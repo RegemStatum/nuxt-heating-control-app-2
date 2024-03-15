@@ -1,0 +1,165 @@
+@use "./breakpoints" as *;
+@use "./functions" as *;
+
+// Containers
+@mixin container {
+  width: 100%;
+  margin: 0 auto;
+  padding-left: getInd(400);
+  padding-right: getInd(400);
+
+  @include sm {
+    max-width: map-get($breakpoints, "sm");
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  @include md {
+    max-width: map-get($breakpoints, "md");
+  }
+
+  @include lg {
+    max-width: map-get($breakpoints, "lg");
+  }
+
+  @include xl {
+    max-width: map-get($breakpoints, "xl");
+  }
+
+  @include xxl {
+    max-width: map-get($breakpoints, "xl");
+  }
+}
+
+@mixin sectionContainer {
+  @include boxShadow1;
+
+  padding: getInd(1000);
+  border-radius: getBorderRadius(800);
+  background-color: getColor("nt-12");
+}
+
+// Box shadows
+@mixin boxShadow1 {
+  box-shadow: 0 1px 3px hsla(0, 0%, 0%, 0.12), 0 1px 2px hsla(0, 0%, 0%, 0.24);
+}
+
+@mixin boxShadow2 {
+  box-shadow: 0 3px 6px hsla(0, 0%, 0%, 0.15), 0 2px 4px hsla(0, 0%, 0%, 0.12);
+}
+
+@mixin boxShadow3 {
+  box-shadow: 0 10px 20px hsla(0, 0%, 0%, 0.15), 0 3px 6px hsla(0, 0%, 0%, 0.1);
+}
+
+@mixin boxShadow4 {
+  box-shadow: 0 15px 25px hsla(0, 0%, 0%, 0.15),
+    0 5px 10px hsla(0, 0%, 0%, 0.05);
+}
+
+@mixin boxShadow5 {
+  box-shadow: 0 20px 40px hsla(0, 0%, 0%, 0.2);
+}
+
+// Inputs
+@mixin inputContainer {
+  // Position label relative to input-label-container
+  .input-label-container {
+    position: relative;
+  }
+
+  .label {
+    $top: 50%;
+    $translateX: 5px;
+    $translateY: -50%;
+    $fontWeight: 500;
+
+    position: absolute;
+    top: $top;
+    transform: translate($translateX, $translateY);
+    padding: 0 getInd(100);
+    border-radius: getBorderRadius(400);
+    font-size: getFontSize(300);
+    font-weight: $fontWeight;
+    line-height: getLineHeight(1000);
+    background-color: getColor("nt-12");
+  }
+
+  $errorColor: getColor("sp-red-4");
+  .input {
+    $width: 100%;
+
+    display: block;
+    width: $width;
+    padding: getInd(300);
+
+    // Elevate label on focus and when input has value
+    &:focus,
+    &:not(:placeholder-shown) {
+      + .label {
+        top: 0;
+      }
+    }
+
+    &:focus {
+      outline-color: getColor("nt-2");
+    }
+
+    &:disabled {
+      outline-color: getColor("nt-8");
+    }
+
+    &.error {
+      $borderWidth: 1px;
+
+      border: $borderWidth solid $errorColor;
+      color: $errorColor;
+
+      &:focus {
+        outline-color: $errorColor;
+      }
+
+      + .label {
+        color: $errorColor;
+      }
+    }
+  }
+
+  .hint-text,
+  .error-text {
+    padding-top: getInd(200);
+    font-size: getFontSize(300);
+    line-height: getLineHeight(300);
+  }
+
+  .error-text {
+    color: $errorColor;
+  }
+}
+
+// Buttons
+@mixin primaryButton {
+  $width: 100%;
+
+  width: $width;
+  padding: getInd(300) getInd(400);
+  border-radius: getBorderRadius(400);
+  color: getColor("nt-12");
+  background-color: getColor("nt-6");
+
+  &:disabled {
+    background-color: getColor("nt-8");
+  }
+}
+
+// Animations
+@mixin animationSkeletonLoading {
+  @keyframes skeleton-loading {
+    0% {
+      background-color: getColor("nt-10");
+    }
+    100% {
+      background-color: getColor("nt-8");
+    }
+  }
+}
