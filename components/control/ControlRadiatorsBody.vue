@@ -1,5 +1,10 @@
 <script setup lang="ts">
-import { PencilIcon, PlusIcon, MinusIcon } from "@heroicons/vue/24/solid";
+import {
+  PencilIcon,
+  PlusIcon,
+  MinusIcon,
+  CheckIcon,
+} from "@heroicons/vue/24/solid";
 
 import type { Radiator } from "~/composables/useFirestoreRadiators";
 
@@ -8,8 +13,12 @@ interface Props {
 }
 defineProps<Props>();
 
-const { increaseTemperatureByOne, decreaseTemperatureByOne, toggleStatus } =
-  useFirestoreRadiators();
+const {
+  increaseTemperatureByOne,
+  decreaseTemperatureByOne,
+  toggleStatus,
+  updateName,
+} = useFirestoreRadiators();
 
 const handleIncreaseTemperatureByOneBtn = async (radiatorId: string) => {
   await increaseTemperatureByOne(radiatorId);
@@ -25,6 +34,21 @@ const handleToggleStatus = async (radiatorId: string) => {
   await toggleStatus(radiatorId);
   await refreshNuxtData();
 };
+
+const editName = useState<string>("editName", () => "");
+const editNameRadiatorId = useState<string>("editNameRadiatorId", () => "");
+
+const handleUpdateName = async () => {
+  if (editName.value === "" || editName.value.trim() === "") {
+    return;
+  }
+
+  await updateName(editNameRadiatorId.value, editName.value);
+
+  editName.value = "";
+  editNameRadiatorId.value = "";
+  await refreshNuxtData();
+};
 </script>
 
 <template>
@@ -35,9 +59,21 @@ const handleToggleStatus = async (radiatorId: string) => {
       class="table-row"
     >
       <th scope="row" class="name">
-        <p>{{ name }}</p>
-        <button type="submit" class="edit-btn">
-          <PencilIcon class="edit-icon" />
+        <p v-if="editNameRadiatorId !== index">{{ name }}</p>
+        <input v-else v-model="editName" placeholder="Enter new name" />
+        <button
+          @click="
+            () => {
+              editNameRadiatorId
+                ? handleUpdateName()
+                : (editNameRadiatorId = index);
+            }
+          "
+          type="button"
+          class="edit-btn"
+        >
+          <PencilIcon v-if="editNameRadiatorId !== index" class="edit-icon" />
+          <CheckIcon v-else class="ok-icon" />
         </button>
       </th>
       <td class="temperature">
@@ -86,6 +122,13 @@ const handleToggleStatus = async (radiatorId: string) => {
 
       .edit-icon {
         $iconSize: 15px;
+
+        width: $iconSize;
+        height: $iconSize;
+      }
+
+      .ok-icon {
+        $iconSize: 20px;
 
         width: $iconSize;
         height: $iconSize;
